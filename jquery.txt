@@ -1,0 +1,168 @@
+//GOOD
+var newTweet = '';
+
+$.each(myArray, function(index, item) {
+  newTweet += '<li>' + item + '</li>';
+});
+
+$('#statuses').html(newTweet);
+
+-------------------------------------------------------
+
+//GOOD
+var bindingObject = {
+  onReady : function() {
+    $('.status .delete').click(bindingObject.deleteTweet);
+    $('.status').dblclick(bindingObject.deleteTweet);
+  },
+  deleteTweet : function(e) {
+    //Do something
+  }
+};
+
+$(document).ready(bindingObject.onReady);
+
+
+-------------------------------------------------------
+
+// This is fast
+$('#statuses .status');
+
+//This is faster
+$('#statuses').find('.status');
+
+
+-------------------------------------------------------
+Be more specific on the right side of your selector rather than on the left 
+//GOOD
+$('li.status .delete');
+
+//BETTER
+$('.status img.delete');
+
+-------------------------------------------------------
+
+$.fn.each to iterate over each selected element in a selection and 
+$.each to iterate over an array or an object
+-------------------------------------------------------
+
+$.each(['apple','banana','peach'], function(key, value) {
+  console.log('key: ' + key + ' value: ' + value);
+});
+-------------------------------------------------------
+if ($.inArray(31, myArray) !== -1) { // 1
+  console.log('found it!');
+}
+
+-------------------------------------------------------
+var myFirstObject = { fruit : 'apple', vegetable: 'carrot' };
+var mySecondObject = { fruit : 'banana' };
+var resultingObject = $.extend(myFirstObject, mySecondObject); // 1
+console.log(myFirstObject.fruit); // 2
+console.log(resultingObject.fruit); //
+
+-------------------------------------------------------
+<script src="jquery.js"></script>
+<script>var $j = jQuery.noConflict();</script>
+
+//Using the jQuery variable
+$j('.status').show();
+
+-------------------------------------------------------
+
+$('button').click(function () {
+$('div').animate({left:'+=200px'}, 2000);
+  $('div').animate({top:'0px'}, 600);
+  $('div').queue(function(){ // 1
+    $(this).css('backgroundColor','red');
+    $(this).dequeue(); // 2
+  });
+  $('div').animate({left:'10px', top:'30px'}, 700);
+});
+
+
+-------------------------------------------------------
+
+Plugin 
+
+jQuery.fn.myPlugin = function() {
+
+  // Do your awesome plugin stuff here
+
+};
+
+OR
+
+(function( $ ) {
+  $.fn.myPlugin = function() {
+  
+    // Do your awesome plugin stuff here
+
+  };
+})( jQuery );
+$('#element').myPlugin();
+$.fn.tooltip = function( options ) {  
+
+    // Create some defaults, extending them with any options that were provided
+    var settings = $.extend( {
+      'location'         : 'top',
+      'background-color' : 'blue'
+    }, options);
+return this.each(function() {        
+
+      // Tooltip plugin code here
+
+    });
+
+  };
+})( jQuery );
+
+-------------------------------------------------------
+$.fn.hilight = function(options) {
+  var defaults = {
+    foreground: 'red',
+    background: 'yellow'
+  };
+  // Extend our default options with those provided.
+  var opts = $.extend(defaults, options);
+  // Our plugin implementation code goes here.
+};
+----------------------------------------------------------------
+(function($) {
+
+	$.fn.hilight = function(options) {
+  	  debug(this);
+    	// ...
+ 	 };
+	function debug($obj) {
+  	 if (window.console && window.console.log)
+    	  window.console.log('hilight selection count: ' + $obj.size());
+  	};
+})(jQuery);
+-------------------------------------------------------
+(function( $ ){
+
+ var methods = {
+	         init : function( options ) {
+		
+	        },
+ 
+	         update : function( content ) { 
+	
+	       }
+ 
+  	     };
+
+  $.fn.tooltip = function( method ) {
+    
+    if ( methods[method] ) {
+      return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+    } else if ( typeof method === 'object' || ! method ) {
+      return methods.init.apply( this, arguments );
+    } else {
+      $.error( 'Method ' +  method + ' does not exist on jQuery.tooltip' );
+    }    
+  
+  };
+
+})( jQuery );
